@@ -1,22 +1,35 @@
 package org.supernani.domain.emprestimo;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import io.quarkus.hibernate.panache.PanacheEntityBase;
 
 //import org.supernani.validation.EmprestimoValido;
-
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-//import lombok.Data;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
+@ToString
+@Setter
+@EqualsAndHashCode
+@Getter
 @Entity
-//@Data
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -26,7 +39,7 @@ public class Emprestimo extends PanacheEntityBase {
     @GeneratedValue
     private UUID idEmprestimo;
 
-    @NotBlank 
+    @NotNull 
     private UUID idCliente;
 
     @NotNull
@@ -39,10 +52,10 @@ public class Emprestimo extends PanacheEntityBase {
     @Max(480)
     private Integer prazoContratado;
     
-    @NotBlank
+    @NotNull
     private TipoAmortizacao tipoAmortizacao;
 
-    @NotBlank
+    @NotNull
     private StatusEmprestimo statusEmprestimo;
 
     //Como ex-gerente de carteira, faz sentido para mim que haja essas duas informações persistidas. Por exemplo, se eu souber a 
@@ -52,6 +65,8 @@ public class Emprestimo extends PanacheEntityBase {
 
     @DecimalMin("0.00000000000000000000001")
     private Double taxaJuros;
+
+    private LocalDate dataContratacao;
 
 
 }

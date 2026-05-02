@@ -1,5 +1,5 @@
 package org.supernani.domain.taxaJuros;
 
-public class TaxaJurosExceptionMapper {
+public @interface TaxaJurosValueObj {
     
 }

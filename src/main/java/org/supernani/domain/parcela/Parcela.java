@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
+
+import org.supernani.domain.emprestimo.Emprestimo;
 
 import io.quarkus.hibernate.panache.PanacheEntityBase;
 
@@ -18,7 +20,10 @@ import io.quarkus.hibernate.panache.PanacheEntityBase;
 public class Parcela extends PanacheEntityBase {
     
     @Id
-    private UUID id_parcela;
+    private UUID idParcela;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Emprestimo emprestimo;
     
     @NotNull
     @Min(1)
@@ -26,7 +31,7 @@ public class Parcela extends PanacheEntityBase {
     private Integer ordemParcela;
 
     @NotNull
-    private  Date dataVencimento;
+    private  LocalDate dataVencimento;
 
     @NotNull
     @DecimalMin("0.00000000000000000000001")
