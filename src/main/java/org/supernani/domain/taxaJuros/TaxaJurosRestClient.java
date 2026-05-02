@@ -7,11 +7,11 @@ import java.util.UUID;
 
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.supernani.domain.exceptions.TaxaJurosExceptionMapper;
+import org.supernani.domain.exceptions.ClienteInelegivelExceptionMapper;
 
 @Path("/api/caixa-verso")
 @RegisterRestClient(configKey = "apisparatestes")
-@RegisterProvider(TaxaJurosExceptionMapper.class)
+@RegisterProvider(ClienteInelegivelExceptionMapper.class)
 
 public interface TaxaJurosRestClient {
 

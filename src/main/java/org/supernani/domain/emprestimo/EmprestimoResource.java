@@ -1,17 +1,23 @@
 package org.supernani.domain.emprestimo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
+import org.supernani.domain.parcela.Parcela;
 import org.supernani.domain.taxaJuros.TaxaJurosResponseDTO;
+import org.supernani.repositories.EmprestimoRepository;
+import org.supernani.repositories.ParcelaRepository;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -21,6 +27,12 @@ public class EmprestimoResource {
 
     @Inject
     private EmprestimoService emprestimoService;
+
+    @Inject
+    EmprestimoRepository emprestimoRepository;
+
+    @Inject
+    ParcelaRepository parcelaRepository;
     
     @Path("/clientes/{clienteId}/taxas/{tipoAmortizacao}/elegibilidade")
     @GET
@@ -51,10 +63,44 @@ public class EmprestimoResource {
     public Response cadastrarContrato(EmprestimoDTO emprestimoDTO){
         Boolean cadastrado = emprestimoService.cadastrarContrato(emprestimoDTO);
         if(cadastrado){
-            return Response.status(201).build();
+            return Response.status(201).entity(Map.of("success", "Sucesso na solicitação")).build();
         }
-        return  Response.status(400).build();
-
-
+        return  Response.status(400).entity(Map.of("error","Não há taxas disponíveis para o cliente informado")).build();
     }
+
+    @Authenticated
+    @Path("/clientes")
+    @GET
+    public Response listaEmprestimos(
+        @QueryParam("clienteId") String idCliente
+
+    ){
+        try{
+            UUID.fromString(idCliente);
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST) .entity("clienteId inválido") .build();
+        }
+
+        List<Emprestimo> emprestimos = emprestimoRepository.buscaPorIdCliente(UUID.fromString(idCliente));
+
+        if (emprestimos.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        return Response.ok(emprestimos).build();
+    }
+
+    @Authenticated
+    @Path("/{emprestimoId}/parcelas")
+    public Response listarParcelas(@PathParam("emprestimoId") UUID emprestimoId) {
+
+        List<Parcela> parcelas = parcelaRepository.buscaPorIdEmprestimo(emprestimoId);
+
+        if (parcelas.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        return Response.ok(parcelas).build();
+    }
+
 }

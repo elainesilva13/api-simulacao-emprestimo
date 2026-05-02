@@ -12,7 +12,6 @@ public class TaxaJurosExceptionMapper implements ExceptionMapper<ClienteInelegiv
 
     @Override
     public Response toResponse(ClienteInelegivelException exception) {
-
         TaxaJurosErrorResponseDTO dto = new TaxaJurosErrorResponseDTO(exception.getMessage());
 
         return Response.status(Response.Status.BAD_REQUEST)
