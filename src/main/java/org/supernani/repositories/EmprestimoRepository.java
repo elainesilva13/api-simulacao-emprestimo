@@ -14,8 +14,7 @@ public class EmprestimoRepository implements PanacheRepositoryBase<Emprestimo, U
     }
 
     public Emprestimo buscaPorIdEmprestimo(UUID idEmprestimo) {
-        return find("idEmprestimo", idEmprestimo)
-            .firstResult();
+        return findById(idEmprestimo);
     }
     
 }

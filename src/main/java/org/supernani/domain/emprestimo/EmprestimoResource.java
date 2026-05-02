@@ -38,7 +38,7 @@ public class EmprestimoResource {
     @Inject
     ParcelaRepository parcelaRepository;
     
-    @Path("/clientes/{clienteId}/taxas/{tipoAmortizacao}/elegibilidade")
+    @Path("/cliente/{clienteId}/taxas/{tipoAmortizacao}/elegibilidade")
     @GET
     public Response consultaTaxa(
         @PathParam("clienteId") String idCliente
@@ -73,7 +73,7 @@ public class EmprestimoResource {
     }
 
     @Authenticated
-    @Path("/clientes")
+    @Path("/cliente")
     @GET
     public Response listaEmprestimos(
         @QueryParam("clienteId") String idCliente
@@ -95,6 +95,27 @@ public class EmprestimoResource {
     }
 
     @Authenticated
+    @Path("/cliente/{clienteId}/emprestimos-com-parcelas")
+    @GET
+    public Response listaEmprestimos2(
+        @QueryParam("clienteId") String idCliente
+
+    ){
+        try{
+            UUID.fromString(idCliente);
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST) .entity("clienteId inválido") .build();
+        }
+
+        List<Emprestimo> emprestimos = emprestimoRepository.buscaPorIdCliente(UUID.fromString(idCliente));
+
+        if (emprestimos.isEmpty()) {
+            return Response.noContent().build();
+        }
+
+        return Response.ok(emprestimos).build();
+    }
+    @Authenticated
     @Path("/{emprestimoId}/parcelas")
     @GET
     public Response listarParcelas(@PathParam("emprestimoId") String emprestimoId) {
@@ -113,7 +134,7 @@ public class EmprestimoResource {
         return Response.ok(parcelas).build();
     }
     @Authenticated
-    @Path("/clientes/{clienteId}/emprestimos-com-parcelas")
+    @Path("/clientesBackup/{clienteId}/emprestimos-com-parcelas")
     @GET
     public Response buscarEmprestimosComParcelas(@PathParam("clienteId") String clienteId) {
         try {

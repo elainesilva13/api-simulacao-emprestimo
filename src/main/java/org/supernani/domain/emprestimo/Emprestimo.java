@@ -5,33 +5,30 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.supernani.domain.parcela.Parcela;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.CascadeType;
-//import org.supernani.validation.EmprestimoValido;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 
-@ToString
 @EqualsAndHashCode(callSuper=false)
 @Setter
 @Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Emprestimo extends PanacheEntityBase {
 
     @Id
@@ -58,6 +55,7 @@ public class Emprestimo extends PanacheEntityBase {
     private LocalDate dataContratacao;
 
     @OneToMany(mappedBy = "emprestimo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Parcela> parcelas;
 
 

@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.supernani.domain.emprestimo.Emprestimo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,22 +19,18 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 
-@ToString
 @Setter
 @EqualsAndHashCode(callSuper=false)
 @Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Parcela extends PanacheEntityBase {
     
     @Id
@@ -40,7 +38,8 @@ public class Parcela extends PanacheEntityBase {
     private UUID idParcela;
     
     @ManyToOne
-    @JoinColumn(name = "emprestimo_id")    
+    @JoinColumn(name = "idEmprestimo")
+    @JsonBackReference    
     private Emprestimo emprestimo;
     
     @NotNull
