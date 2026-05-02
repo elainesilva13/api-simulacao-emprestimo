@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import org.supernani.domain.parcela.Parcela;
 
-import io.quarkus.hibernate.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.CascadeType;
 //import org.supernani.validation.EmprestimoValido;
 import jakarta.persistence.Entity;
@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +24,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@EqualsAndHashCode(callSuper=false)
 @ToString
+@EqualsAndHashCode(callSuper=false)
 @Setter
 @Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Data
 public class Emprestimo extends PanacheEntityBase {
 
     @Id

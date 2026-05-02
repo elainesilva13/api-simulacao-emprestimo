@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.supernani.domain.emprestimo.Emprestimo;
 
-import io.quarkus.hibernate.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
