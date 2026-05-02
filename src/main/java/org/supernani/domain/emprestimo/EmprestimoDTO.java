@@ -30,7 +30,6 @@ public record EmprestimoDTO(
     @NotNull(message = "Tipo de amortização não informado")
     TipoAmortizacao tipoAmortizacao,
 
-    @NotNull(message = "Status do empréstimo não informado")
     StatusEmprestimo statusEmprestimo,
 
     @DecimalMin(value = "0.0", message = "Taxa de juros não pode ser negativa")
@@ -55,7 +54,8 @@ public record EmprestimoDTO(
         dto.statusEmprestimo(),
         saldoDevedoInicial, 
         dto.taxaJuros(),
-        dto.dataContratacao() != null ? dto.dataContratacao() : LocalDate.now()
+        dto.dataContratacao() != null ? dto.dataContratacao() : LocalDate.now(),
+        null
     );
 }
 }

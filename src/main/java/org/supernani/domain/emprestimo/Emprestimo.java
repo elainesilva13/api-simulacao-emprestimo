@@ -2,15 +2,20 @@ package org.supernani.domain.emprestimo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
-import io.quarkus.hibernate.panache.PanacheEntityBase;
+import org.supernani.domain.parcela.Parcela;
+
+import io.quarkus.hibernate.panache.PanacheEntity;
+import jakarta.persistence.CascadeType;
 //import org.supernani.validation.EmprestimoValido;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +28,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -41,6 +45,7 @@ public class Emprestimo extends PanacheEntityBase {
     
     private TipoAmortizacao tipoAmortizacao;
 
+    @NotNull(message = "Status do empréstimo não informado")
     private StatusEmprestimo statusEmprestimo;
 
     //Como ex-gerente de carteira, faz sentido para mim que haja essas duas informações persistidas. Por exemplo, se eu souber a 
@@ -50,6 +55,9 @@ public class Emprestimo extends PanacheEntityBase {
     private Double taxaJuros;
 
     private LocalDate dataContratacao;
+
+    @OneToMany(mappedBy = "emprestimo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Parcela> parcelas;
 
 
 }

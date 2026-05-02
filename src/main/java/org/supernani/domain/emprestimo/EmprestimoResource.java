@@ -5,13 +5,17 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jboss.resteasy.reactive.ClientWebApplicationException;
+import org.supernani.domain.parcela.EmprestimoComParcelasDTO;
 import org.supernani.domain.parcela.Parcela;
 import org.supernani.domain.taxaJuros.TaxaJurosResponseDTO;
 import org.supernani.repositories.EmprestimoRepository;
 import org.supernani.repositories.ParcelaRepository;
 
 import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -92,9 +96,15 @@ public class EmprestimoResource {
 
     @Authenticated
     @Path("/{emprestimoId}/parcelas")
-    public Response listarParcelas(@PathParam("emprestimoId") UUID emprestimoId) {
+    @GET
+    public Response listarParcelas(@PathParam("emprestimoId") String emprestimoId) {
+        try{
+            UUID.fromString(emprestimoId);
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST) .entity("clienteId inválido") .build();
+        }
 
-        List<Parcela> parcelas = parcelaRepository.buscaPorIdEmprestimo(emprestimoId);
+        List<Parcela> parcelas = parcelaRepository.buscaPorIdEmprestimo(UUID.fromString(emprestimoId));
 
         if (parcelas.isEmpty()) {
             return Response.noContent().build();
@@ -102,5 +112,38 @@ public class EmprestimoResource {
 
         return Response.ok(parcelas).build();
     }
+    @Authenticated
+    @Path("/clientes/{clienteId}/emprestimos-com-parcelas")
+    @GET
+    public Response buscarEmprestimosComParcelas(@PathParam("clienteId") String clienteId) {
+        try {
+            UUID.fromString(clienteId);
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("clienteId inválido")
+                    .build();
+        }
+        List<EmprestimoComParcelasDTO> resultado = emprestimoService.buscarEmprestimosComParcelas(UUID.fromString(clienteId));
+        if(resultado==null){
+             return Response.noContent().build();
+        }
+        return Response.ok(resultado).build();
+    }
 
+    @Transactional
+    @Path("/emprestimos/{id}")
+    @RolesAllowed("Gerente")
+    @DELETE
+    public Response deletarEmprestimo(@PathParam("id") String idEmprestimo) {
+
+    Emprestimo emprestimo = emprestimoRepository.findById(UUID.fromString(idEmprestimo));
+
+        if (emprestimo == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        emprestimoRepository.delete(emprestimo);
+
+        return Response.noContent().build();
+    }
 }

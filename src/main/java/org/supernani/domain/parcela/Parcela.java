@@ -7,10 +7,10 @@ import java.util.UUID;
 import org.supernani.domain.emprestimo.Emprestimo;
 
 import io.quarkus.hibernate.panache.PanacheEntityBase;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
@@ -39,7 +39,8 @@ public class Parcela extends PanacheEntityBase {
     @GeneratedValue
     private UUID idParcela;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "emprestimo_id")    
     private Emprestimo emprestimo;
     
     @NotNull
