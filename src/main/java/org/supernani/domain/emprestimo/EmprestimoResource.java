@@ -51,7 +51,7 @@ public class EmprestimoResource {
     public Response cadastrarContrato(EmprestimoDTO emprestimoDTO){
         Boolean cadastrado = emprestimoService.cadastrarContrato(emprestimoDTO);
         if(cadastrado){
-            return Response.status(200).build();
+            return Response.status(201).build();
         }
         return  Response.status(400).build();
 

@@ -3,39 +3,33 @@ package org.supernani.domain.emprestimo;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.supernani.domain.parcela.ParcelaService;
 import org.supernani.domain.taxaJuros.TaxaJurosResponseDTO;
-import org.supernani.domain.taxaJuros.TaxaJurosRestClient;
+import org.supernani.domain.taxaJuros.TaxaJurosService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @ApplicationScoped
 public class EmprestimoService {
     
     @Inject
-    @RestClient
-    protected TaxaJurosRestClient taxaJurosRestClient;
+    protected TaxaJurosService taxaJurosService;
 
-    protected TaxaJurosResponseDTO buscaTaxaJurosResponse(UUID idCliente){
-        return taxaJurosRestClient.buscaTaxaJuros(idCliente);
-        
+
+    public Double buscaTaxaJuros(UUID idCliente){
+        return taxaJurosService.buscaTaxaJuros(idCliente);
     }
 
-    protected Double buscaTaxaJuros(UUID idCliente){
-        try{
-            TaxaJurosResponseDTO taxaJurosResponseDTO = this.buscaTaxaJurosResponse(idCliente);
-            return taxaJurosResponseDTO.taxaJuros();
-        }catch(Exception e){
-            return null;
-        }   
+    public TaxaJurosResponseDTO buscaTaxaJurosResponse(UUID idCliente){
+        return taxaJurosService.buscaTaxaJurosResponse(idCliente);
     }
 
     @Transactional
-    protected Boolean cadastrarContrato(EmprestimoDTO emprestimoDTO){
-        Double taxa = this.buscaTaxaJuros(emprestimoDTO.idCliente());
+    public Boolean cadastrarContrato(@Valid EmprestimoDTO emprestimoDTO){
+        Double taxa = taxaJurosService.buscaTaxaJuros(emprestimoDTO.idCliente());
         if(taxa == null){
             return false;
         }

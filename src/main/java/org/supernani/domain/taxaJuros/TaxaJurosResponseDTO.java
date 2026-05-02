@@ -1,6 +1,6 @@
 package org.supernani.domain.taxaJuros;
 
-public record TaxaJurosResponseDTO(
+public record TaxaJurosResponseDTO (
     Double taxaJuros
 ) {
 }
