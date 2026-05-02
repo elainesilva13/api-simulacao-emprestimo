@@ -1,10 +1,5 @@
 package org.supernani.domain.parcela;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,16 +7,38 @@ import java.util.UUID;
 import org.supernani.domain.emprestimo.Emprestimo;
 
 import io.quarkus.hibernate.panache.PanacheEntityBase;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
+@ToString
+@Setter
+@EqualsAndHashCode
+@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Parcela extends PanacheEntityBase {
     
     @Id
+    @GeneratedValue
     private UUID idParcela;
-
+    
     @ManyToOne(cascade = CascadeType.ALL)
     private Emprestimo emprestimo;
     

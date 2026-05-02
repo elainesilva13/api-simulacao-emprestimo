@@ -31,7 +31,7 @@ public class ParcelaService {
 
         BigDecimal saldo = emprestimo.getValorTomado();
         BigDecimal taxaJuros = BigDecimal.valueOf(emprestimo.getTaxaJuros());
-        LocalDate dataContratacao = emprestimo.getDataContratacao();
+        LocalDate  dataContratacao = emprestimo.getDataContratacao();
         for (Integer i = 1; i <= prazoContratado; i++) {
 
             BigDecimal valorJuros = saldo.multiply(taxaJuros);
